@@ -91,6 +91,12 @@ $pasted=$targetLayer.Paste()
 
 ImportEx 曾需要显式过滤器0和 CreateStructImportOptions()，再调用返回过滤器 Finish()；实际签名先查。空暂存图层有助识别新增对象，非空图层不能假定 Item(1) 就是新图。
 
+本机 X8 实测不支持本地 MCP 旧实现的 `Document.Import(path)`；SVG和位图使用 `page.ActiveLayer.ImportEx(path, 0, app.CreateStructImportOptions())`，随后 `Finish()`。导入前后按 StaticID 差集识别新对象，不用 `Shapes.Last` 猜测新增对象。多个新对象用 `app.CreateShapeRange()` 逐个 `Add` 后组合；只有一个对象时直接使用它，不调用单对象 `Group()` 并假定返回新群组。变换带描边的 SVG 后须检查线宽是否随图形缩放，必要时在SVG中把描边构造成填充路径。
+
+切页或分组异常先用独立文档复现，区分工具适配、脚本对象处理和应用状态问题；不要把一次异常直接写成X8普遍缺陷。跨调用后回读目标页，创建/移动对象后核对实际所属页、图层和StaticID。
+
+本机X8实测：把群组移到页面框外时，可能自动转到共享的“桌面”主图层，该层默认不可打印；`page.Shapes` 也可能包含共享桌面对象。搬移多页内容到同一工作页时，源页范围要按目标页本地图层或明确StaticID筛选，不能直接把每次 `page.Shapes` 全部打包；否则可能把已搬到桌面层的内容再次纳入后续群组。`MoveToLayer(指定本地层)` 可临时恢复归属，但保存/重开后仍可能转回桌面层，必须以磁盘重开结果核实，不能据内存状态保证。框外内容可以保留在桌面层；完整预览使用统一MCP的 `workspace` 范围或临时导出文档，不为输出而把整个桌面层设为可打印，也不擅自改其他桌面素材。跨本地图层和桌面层的混合 `ShapeRange.Copy()` 本机曾报错；临时导出按根对象逐个 Copy/Paste，放到临时页内的本地图层，并在调用导出前再次显式激活临时文档。
+
 ## 文字、事务与保存
 
 ```powershell

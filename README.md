@@ -13,6 +13,8 @@
 
 推荐流程：**先安装 MCP → 再安装本技能 → 描述源文件和版式要求 → AI 按技能调用 MCP → 检查保存后的 CDR 与预览。**
 
+配套 MCP 由 [CorelDRAW Live MCP](https://github.com/CubicDev1/corel-mcp) 与 [CorelDRAW Signage MCP](https://github.com/wuguirongsg/coreldraw-mcp) 的本地适配版本整合而来；详细功能继承与改动见其[项目来源记录](https://github.com/caoshuo594/coreldraw-mcp/blob/main/docs/provenance.md)。
+
 ## 适用场景
 
 - 展板、展墙与多个墙面的单元排版。

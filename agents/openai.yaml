@@ -1,0 +1,4 @@
+interface:
+  display_name: "CorelDRAW 本地排版"
+  short_description: "通过本地 COM 操作 CorelDRAW，完成可编辑展板排版及保存后验收"
+  default_prompt: "请使用 $coreldraw-layout，根据我的源文件与参考版式操作本地 CorelDRAW，交付可编辑 CDR、预览和核对结果。"
